@@ -1,0 +1,24 @@
+<md-dialog aria-label="Our Friends"  ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Наши друзья</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="assets/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content style="max-width:800px;max-height:810px; ">
+      <div class="md-dialog-content">
+        <md-list>
+          <md-list-item class="md-2-line" ng-repeat="group in friends">
+            <img ng-src="{{group.photo}}" class="md-avatar" alt="{{_ctrl.name}}" />
+            <div class="md-list-item-text" layout="column" layout-align="left center">
+              <h3><a target="_blank" href="https://vk.com/{{group.group_uid}}">{{ group.name }}<a></h3>
+              <p>{{group.info}}</p>
+            </div>
+          </md-list-item>
+        </md-list>
+      </div>
+    </md-dialog-content>
+</md-dialog>

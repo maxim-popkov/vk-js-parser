@@ -1,0 +1,151 @@
+<!-- Loader section  -->
+<md-content flex>
+  <!-- Title -->
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+    <h2><span>Отбор профилей для Таргетинга</span></h2>
+<!--     <span flex></span>
+    <md-button class="md-icon-button" aria-label="Favorite" ng-click="_ctrl.swapControlsVisible()">
+          <md-icon md-svg-icon="assets/img/icons/ic_code_24px.svg"></md-icon>
+    </md-button> -->
+    </div>
+  </md-toolbar>
+
+  <md-content layout-padding ng-show="_ctrl.controlsVisible">
+    <form name="taskForm">
+      <div layout layout-sm="column">
+        <md-input-container flex>
+          <label>Пол</label>
+          <md-select ng-model="_ctrl.sex">
+            <md-option ng-repeat="sex in _ctrl.sexs" value="{{sex}}">
+              {{sex}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container flex>
+          <label>Возраст От</label>
+          <md-select ng-model="_ctrl.ages.from"
+                     ng-disable="!_ctrl.withAge">
+            <md-option ng-repeat="age in _ctrl.age_intervals" value="{{age}}">
+              {{age}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container flex>
+          <label>Возраст До</label>
+
+          <md-select ng-model="_ctrl.ages.to">
+            <md-option ng-repeat="age in _ctrl.age_intervals" value="{{age}}">
+              {{age}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <div flex layout-align="bottom">
+          <md-button ng-click="_ctrl.ages.to=''; _ctrl.ages.from=''"
+                     ng-disabled="_ctrl.ages.to=='' && _ctrl.ages.from==''">Сбросить возраст</md-button>
+        </div>
+      </div>
+      <div layout layout-sm="column">
+        <md-input-container flex>
+          <label>Страна</label>
+          <md-select ng-model="_ctrl.country">
+            <md-option ng-repeat="country in _ctrl.countries" value="{{country}}">
+              {{country}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container flex>
+          <label>Город</label>
+          <input ng-model="_ctrl.city">
+        </md-input-container>
+        <md-input-container flex>
+         <md-tooltip md-direction="top">
+          Не участвует в пересчете статистики
+          </md-tooltip>
+          <label>Кол-во групп в которых замечен</label>
+          <input ng-model="_ctrl.mutualGroups" type="number" step="1">
+        </md-input-container>
+      </div>
+      <div layout layout-sm="column">
+        <md-input-container flex class="md-block">
+            <h2 class="md-title">Введите Группы</h2>
+            <label>Введите ссылки на группы или их названия</label>
+            <textarea ng-model="_ctrl.groupLinksText" 
+                      md-no-autogrow="true" 
+                      ng-change="_ctrl.groupLinksTextChange()" 
+                      columns="1" rows="5" 
+                      style="overflow-y: scroll;">
+            </textarea>
+        </md-input-container>
+        <md-input-container flex>
+            <h2 class="md-title">Отобранные группы</h2>
+            <md-chips
+                ng-model="_ctrl.targetGroups"
+                delete-button-label="Удалить группу"
+                delete-hint="Press delete to remove tag"
+                secondary-placeholder="+Группа"
+                md-on-remove="_ctrl.removeChip($chip)">
+                <input type="text" aria-label="костыль" disabled="true">
+            </md-chips>
+        </md-input-container>
+      </div>
+
+      <br/>
+      <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+        <!-- <md-button  ng-disabled="_ctrl.actionBtn.isDisabled"
+                    class="md-raised"
+                    ng-class="{'md-warn': _ctrl.actionBtn.text=='Стоп'}"
+                    ng-click="_ctrl.actionDo($event)">
+                    {{_ctrl.actionBtn.text}}
+        </md-button> -->
+        <md-button  ng-disabled="_ctrl.actionBtn.isDisabled"
+                    class="md-raised"
+                    ng-click="_ctrl.actionDo($event)">
+                    Старт
+        </md-button>
+        <md-button  ng-disabled="_ctrl.processedGroups.length < 1"
+                    ng-click="_ctrl.filterProfiles()"
+                    class="md-raised md-primary">
+                    Пересчитать
+        </md-button>
+        <md-button  ng-disabled="_ctrl.processedGroups.length < 1"
+                    ng-click="_ctrl.saveAll($event)"
+                    class="md-raised md-primary">
+                    Сохранить
+        </md-button>
+        <md-button  ng-disabled="!_ctrl.isAnyChecked()"
+                    ng-click="_ctrl.removeGroups($event)"
+                    class="md-raised md-primary">
+                    Удалить
+        </md-button>
+      </section>
+    </form>
+  </md-content>
+  <md-content flex>
+    <md-toolbar class="md-green">
+      <div class="md-toolbar-tools">
+        <h2 class="md-flex">Результаты</h2>
+      </div>
+    </md-toolbar>
+    <md-list>
+<!--     <md-subheader class="md-no-sticky">Группы | не более 150 тысяч профилей на группу</md-subheader>
+ -->      <md-list-item class="md-3-line" ng-repeat="group in _ctrl.processedGroups">
+        <img ng-src="{{group.photo}}" class="md-avatar" alt="{{_ctrl.name}}" />
+        <div class="md-list-item-text" layout="column">
+          <h3><a target="_blank" href="https://vk.com/{{group.group_uid}}">{{ group.name }}<a></h3>
+          <h4>Скачано {{group.processedUsersCnt}} из {{ group.members }} профилей</h4>
+          <h4>Профилей отобрано {{group.filteredProfiles.length}}</h4>
+          <!-- <p>{{ group.info }}</p> -->
+        </div>
+        <md-checkbox class="md-secondary" aria-label="Удалить" ng-model="group.isChecked"></md-checkbox>
+<!--         <md-button  class="md-raised">
+                    Удалить
+        </md-button> -->
+        <md-divider inset></md-divider>
+      </md-list-item>
+    </md-list>
+  </md-content>
+
+</md-content>
+<!-- end Loader Section -->

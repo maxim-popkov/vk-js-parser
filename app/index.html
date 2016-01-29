@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- build:css assets/css/app.css -->
+    <link rel="stylesheet" href="./bower_components/angular-material/angular-material.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <!-- endbuild -->
+  </head>
+  <body>
+    <div id="outdated"></div>
+    <div layout="row" flex layout-fill>
+      <div ng-controller="sideNavController as _ctrl" layout="row">
+        <md-sidenav md-is-locked-open="$mdMedia('gt-md')" class="md-sidenav md-whiteframe-z2">
+            <md-toolbar class="md-theme-indigo">
+                <h1 class="md-toolbar-tools">Меню</h1>
+            </md-toolbar>
+          <md-button href="#/groupLoader"> Выгрузка из групп </md-button>
+          <md-button href="#/postLoader"> Выгрузка из постов </md-button>
+          <md-button href="#/liker"> Бот для Instagram</md-button>
+          <md-divider></md-divider>   
+          <md-button style="text-align: center;" ng-hide="_ctrl.user.isLogged" ng-click="_ctrl.vkLogin($event)"> Войти в ВК
+                <md-tooltip md-direction="top">
+                      Некоторые методы требуют авторизации в ВК
+                </md-tooltip>
+          </md-button>  
+          <!-- <md-content layout="row" layout-align="center"> -->
+              
+              <div ng-show="_ctrl.user.isLogged" style="text-align: center;"><h3 ng-bind="_ctrl.user.firstName + ' ' + _ctrl.user.lastName"></h3></div>
+          <!-- </md-  content> -->
+          <md-divider ></md-divider> 
+
+ <!--          <md-button href="#/reader"> Читалка </md-button> -->
+
+          <!-- <div layout="column" layout-align="center center"> -->
+          <md-button class="md-warn md-raised" ng-click="_ctrl.showGroups($event)">
+              Присоединяйся к нам
+          </md-button>
+          <!-- </div> -->
+          <md-content>
+            <md-divider ></md-divider>
+            <div style="text-align: center;">
+              <h4><a target="_blank" href="http://vk.com/skiflab">SKIF.Lab в ВКонтакте</a></h4>
+            </div>
+            <md-divider ></md-divider>
+            <div style="text-align: center;">
+              <h2>Связаться со мной</h2>
+            </div>
+            <md-list>
+              <md-list-item class="md-3-line">
+                <img src="http://cs305607.vk.me/u13559899/e_d0ee3272.jpg" class="md-avatar" />
+                <div class="md-list-item-text">
+                  <!-- <h2>Связаться со мной</h2> -->
+                  <h3><a target="_blank" href="https://vk.com/dales3d">Максим Попков</a></h3>
+                  <h4>Творю и анализирую</h4>
+                  <h4>Developer, Data Scientist</h4>
+                  <p>Создание аналитических инстурментов, аналитика в социальных сетях</p>
+                  <p><a target="_blank" href="http://money.yandex.ru/to/410011003189882">Поддержать проект Яндекс.Кошелек</a></p>
+                </div>
+              </md-list-item>
+              <!-- <md-list-item>
+                <div id="login_button" onclick="VK.Auth.login(authInfo);">Login</div>
+              </md-list-item> -->
+            </md-list>
+          </md-content>
+        </md-sidenav>
+      </div>
+      <div flex layout="column">
+        <ng-view></ng-view>
+      </div>
+    </div>
+    <!-- build:js scripts/vendor.js -->
+    <script src="./bower_components/immutable/dist/immutable.min.js"></script>
+    <script src="./bower_components/angular/angular.js"></script>
+    <script src="./bower_components/angular-route/angular-route.js"></script>
+    <script src="./bower_components/angular-animate/angular-animate.js"></script>
+    <script src="./bower_components/angular-aria/angular-aria.js"></script>
+    <script src="./bower_components/angular-material/angular-material.js"></script>
+    <script src="./bower_components/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
+    <script src="//vk.com/js/api/openapi.js" type="text/javascript"></script>
+
+
+    <!-- <script src="./node_modules/json-2-csv/lib/json-2-csv.js" charset="utf-8"></script> -->
+
+    <!-- endbuild -->
+
+    <!-- build:app scripts/app.js -->
+    <script src="./scripts/app.js"></script>
+    <script src="./scripts/services/vkApiService.js"></script>
+    <script src="./scripts/services/saveDataService.js"></script>
+    <script src="./scripts/groupLoader/loaderController.js"></script>
+    <script src="./scripts/liker/likerController.js"></script>
+    <script src="./scripts/sideNav/sideNavController.js"></script>
+    <script src="./scripts/wallReader/wallReaderController.js"></script>
+    <script src="./scripts/postLoader/postLoaderController.js"></script>
+
+    <!-- endbuild -->
+    <script language="javascript">
+    VK.init({
+      apiId: 4265908
+    });
+    function authUpdate (response) {
+        if (response) {
+            console.log(response.session);
+        } else {
+            console.log('No Login');
+        }
+    }
+    function authInfo(response) {
+      if (response.session) {
+        alert('user: '+response.session.mid);
+
+      } else {
+        alert('not auth');
+      }
+    }
+    // VK.Auth.getLoginStatus(authInfo);
+    // VK.UI.button('vklogin_button');
+    </script>
+  </body>
+</html>
